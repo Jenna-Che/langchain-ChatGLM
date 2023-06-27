@@ -135,10 +135,21 @@ class LoaderCheckPoint:
                                                         trust_remote_code=True).half()
                     # 可传入device_map自定义每张卡的部署情况
                     if self.device_map is None:
-                        if 'chatglm' in model_name.lower():
+                        # if 'chatglm' in model_name.lower():
+                        if 'chatglm' in model_name.lower() and "chatglm2" not in model_name.lower():
                             self.device_map = self.chatglm_auto_configure_device_map(num_gpus)
                         elif 'moss' in model_name.lower():
                             self.device_map = self.moss_auto_configure_device_map(num_gpus, model_name)
+                        elif "chatglm2" in model_name.lower():
+                            from accelerate.utils import get_balanced_memory
+                            max_memory = get_balanced_memory(model, 
+                                                                dtype=torch.int8 if self.load_in_8bit else None,
+                                                            low_zero=False, 
+                                                            no_split_module_classes=model._no_split_modules)
+                            self.device_map = infer_auto_device_map(model, 
+                                                               dtype=torch.float16 if not self.load_in_8bit else torch.int8, 
+                                                               max_memory=max_memory,
+                                                               no_split_module_classes=model._no_split_modules)
                         else:
                             self.device_map = self.chatglm_auto_configure_device_map(num_gpus)
 

@@ -79,7 +79,7 @@ llm_model_dict = {
     },
     "vicuna-13b-hf": {
         "name": "vicuna-13b-hf",
-        "pretrained_model_name": "vicuna-13b-hf",
+        "pretrained_model_name": "TheBloke/vicuna-13B-1.1-HF/",
         "local_model_path": None,
         "provides": "LLamaLLM"
     },
@@ -111,7 +111,7 @@ llm_model_dict = {
 }
 
 # LLM 名称
-LLM_MODEL = "chatglm-6b"
+LLM_MODEL = "chatglm2-6b"
 # 量化加载8bit 模型
 LOAD_IN_8BIT = False
 # Load the model with bfloat16 precision. Requires NVIDIA Ampere GPU.
